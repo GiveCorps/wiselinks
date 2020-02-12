@@ -2,13 +2,10 @@ module Wiselinks
   module Rendering
 
     def self.included(base)
-      base.send(:alias_method, :render_without_wiselinks, :render)
-      base.send(:alias_method, :render, :render_with_wiselinks)
+      base.send :prepend, Wiselinks::Rendering
     end
 
-  protected
-
-    def render_with_wiselinks(*args, &block)
+    def render(*args, &block)
       options = _normalize_args(*args)
 
       if self.request.wiselinks?
@@ -32,7 +29,7 @@ module Wiselinks
         end
       end
 
-      self.render_without_wiselinks(options, &block)
+      super
     end
   end
 end
